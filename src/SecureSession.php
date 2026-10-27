@@ -2,6 +2,7 @@
 
     namespace GrangeFencing\SecureSession;
 
+    use Exception;
     use Random\RandomException;
 
     /**
@@ -85,6 +86,9 @@
          * Configuration is applied only when PHP has no active session. Call before sending response output.
          *
          * @return void
+         *
+         * @throws RandomException If CSRF token generation fails and no fallback succeeds.
+         * @throws Exception If the OpenSSL random-byte fallback throws.
          */
         public static function start(): void {
 
@@ -107,6 +111,9 @@
          * Initializes a new session with baseline security metadata and regenerates the session ID.
          *
          * @return void
+         *
+         * @throws RandomException If CSRF token generation fails and no fallback succeeds.
+         * @throws Exception If the OpenSSL random-byte fallback throws.
          */
         private static function initializeSession(): void {
 
@@ -163,6 +170,9 @@
          * and the user-agent fingerprint when missing. A missing fingerprint also triggers ID regeneration.
          *
          * @return void
+         *
+         * @throws RandomException If a required CSRF token cannot be generated and no fallback succeeds.
+         * @throws Exception If the OpenSSL random-byte fallback throws.
          */
         private static function ensureSessionSecurityMetadata(): void {
 
@@ -203,6 +213,7 @@
          *
          * @throws RandomException If random_bytes() throws and the OpenSSL fallback is unavailable
          *                          or does not return exactly 32 bytes.
+         * @throws Exception If the OpenSSL random-byte fallback throws.
          */
         private static function generateCsrfToken(): string {
 
@@ -350,6 +361,7 @@
          *
          * @return bool True if the session is not valid, false otherwise.
          *
+         * @throws Exception
          * @see start()
          */
         public static function isNotValid(): bool {
@@ -417,6 +429,7 @@
          * Call after authentication or another privilege change, not for periodic rotation.
          *
          * @return void
+         * @throws Exception
          */
         public static function regenerate(): void {
 
@@ -460,6 +473,9 @@
          * flag is explicitly true. Returns false for an invalid session or when the flag is not true.
          *
          * @return bool True when the session is valid and logged in; otherwise false.
+         *
+         * @throws RandomException If session startup requires CSRF token generation and no fallback succeeds.
+         * @throws Exception If the OpenSSL random-byte fallback throws during session startup.
          */
         public static function isValidLoggedInSession(): bool {
 
@@ -566,6 +582,7 @@
          * @param array<array-key, mixed> $keyedValues Session keys and their values.
          *
          * @return void
+         * @throws Exception If the OpenSSL random-byte fallback throws.
          */
         public static function setValues(array $keyedValues): void {
 
@@ -587,6 +604,7 @@
          * @param mixed $value The value to set for the session key.
          *
          * @return void
+         * @throws Exception If the OpenSSL random-byte fallback throws.
          */
         public static function setValue(string $key, mixed $value): void {
 
