@@ -1,0 +1,36 @@
+{
+  "name": "grange-fencing/secure-session",
+  "description": "Secure session management library for PHP",
+  "minimum-stability": "stable",
+  "type": "library",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Craig Hancock",
+      "email": "c.hancock@grangefencing.co.uk"
+    }
+  ],
+  "require": {
+    "php": ">=8.3",
+    "ext-ctype": "*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "GrangeFencing\\SecureSession\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "GrangeFencing\\SecureSession\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
